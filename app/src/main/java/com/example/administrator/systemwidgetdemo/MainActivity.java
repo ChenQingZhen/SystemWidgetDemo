@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         mIntent.putExtra("flag",5);
         startActivity(mIntent);
     }
+    public void btnCqzShineTextView(View view){
+        mIntent.putExtra("flag",6);
+        startActivity(mIntent);
+    }
     public void TopBar(View view) {
         Intent intent = new Intent(this, TopBarActivity.class);
         startActivity(intent);

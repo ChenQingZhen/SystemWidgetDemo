@@ -28,6 +28,9 @@ public class MyViewTestActivity extends AppCompatActivity {
             case 5:
                 setContentView(R.layout.my_scroll_view);
                 break;
+            case 6:
+                setContentView(R.layout.cqzshine_textview);
+                break;
         }
     }
 }
