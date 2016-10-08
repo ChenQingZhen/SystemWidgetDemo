@@ -54,6 +54,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="CqzScrollView"
+        android:onClick="btnCqzScrollView"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="TopBar"
         android:onClick="TopBar"
         />
