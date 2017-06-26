@@ -14,10 +14,7 @@ import android.widget.Scroller;
  */
 public class MyScrollView extends ViewGroup {
     private int mScreenHeight;
-    private Scroller mScroller;
-    private int mLastY;
-    private int mStart;
-    private int mEnd;
+    private IBehavior mBehavior;
 
     public MyScrollView(Context context) {
         this(context, null);
@@ -25,17 +22,14 @@ public class MyScrollView extends ViewGroup {
 
     public MyScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
-
-    }
-
-    private void initView(Context context) {
+        mBehavior=new VerticalViewPagerBehavior(context,this);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(dm);
         mScreenHeight = dm.heightPixels;
-        mScroller = new Scroller(context);
     }
+
+
 
 
     @Override
@@ -64,67 +58,13 @@ public class MyScrollView extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int y = (int) event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mLastY = y;
-                mStart=getScrollY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (!mScroller.isFinished()) {
-                    mScroller.abortAnimation();
-                }
-                int dy = mLastY - y;
-                if (getScrollY() < 0) {
-                    dy = 0;
-                }
-                if (getScrollY() > getHeight() - mScreenHeight) {
-                    dy = 0;
-                }
-                scrollBy(0, dy);
-                mLastY = y;
-                break;
-            case MotionEvent.ACTION_UP:
-//                mEnd=getScrollY();
-//                int dScrollY=mEnd-mStart;
-                int dScrollY = checkAlignment();
-                if(dScrollY>0){
-                    if(dScrollY<mScreenHeight/3){
-                        mScroller.startScroll(0,getScrollY(),0,-dScrollY);
-                    }else{
-                        mScroller.startScroll(0,getScrollY(),0,mScreenHeight-dScrollY);
-                    }
-                }else{
-                    if(-dScrollY<mScreenHeight/3){
-                        mScroller.startScroll(0,getScrollY(),0,-dScrollY);
-                    }else{
-                        mScroller.startScroll(0,getScrollY(),0,-mScreenHeight-dScrollY);
-                    }
-                }
-                break;
-        }
-        postInvalidate();
-        return true;
+      return mBehavior.onTouchEvent(event);
     }
-    private int checkAlignment() {
-        int mEnd = getScrollY();
-        boolean isUp = ((mEnd - mStart) > 0) ? true : false;
-        int lastPrev = mEnd % mScreenHeight;
-        int lastNext = mScreenHeight - lastPrev;
-        if (isUp) {
-            //向上的
-            return lastPrev;
-        } else {
-            return -lastNext;
-        }
-    }
+
 
     @Override
     public void computeScroll() {
         super.computeScroll();
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(0, mScroller.getCurrY());
-            postInvalidate();
-        }
+        mBehavior.computeScroll();
     }
 }

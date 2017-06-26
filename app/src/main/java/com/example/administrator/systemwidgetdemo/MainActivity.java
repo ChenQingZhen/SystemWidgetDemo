@@ -54,4 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TopBarActivity.class);
         startActivity(intent);
     }
+    public void btnMyHorizontalScrollView(View view){
+        Intent intent = new Intent(this, MyHorizontalScrollViewTestActivity.class);
+        startActivity(intent);
+    }
 }
